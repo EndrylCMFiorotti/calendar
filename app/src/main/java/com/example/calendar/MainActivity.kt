@@ -22,26 +22,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setCanceledDate("2023-07-10")
-        setCanceledDate("2023-07-12")
-        setCanceledDate("2023-07-23")
-        setCanceledDate("2024-06-22")
+        setEventOnDate("2023-07-10", R.color.red)
+        setEventOnDate("2023-07-12", R.color.red)
+        setEventOnDate("2023-07-23", R.color.red)
+        setEventOnDate("2024-06-22", R.color.red)
 
-        setScheduleDate("2023-07-30")
-        setScheduleDate("2023-07-20")
-        setScheduleDate("2023-10-20")
+        setEventOnDate("2023-07-30", R.color.dark_pink)
+        setEventOnDate("2023-07-20", R.color.dark_pink)
+        setEventOnDate("2023-10-20", R.color.dark_pink)
     }
 
-    private fun setScheduleDate(date: String) {
+    private fun setEventOnDate(date: String, color: Int) {
         dates[SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)!!] =
-            ContextCompat.getColor(this, R.color.dark_pink)
+            ContextCompat.getColor(this, color)
         reloadDatesList()
-    }
 
-    private fun setCanceledDate(date: String) {
-        dates[SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)!!] =
-            ContextCompat.getColor(this, R.color.red)
-        reloadDatesList()
+        // RED - Cancelled day
+        // DARK PINK - Scheduled day
     }
 
     private fun reloadDatesList() {
@@ -52,20 +49,24 @@ class MainActivity : AppCompatActivity() {
 
         with(binding) {
             cpvCalendar.decorators = decorators
+            cpvCalendar.init(Date(), nextYear.time).withSelectedDate(Date())
+        }
 
-            cpvCalendar.setOnDateSelectedListener(object :
-                CalendarPickerView.OnDateSelectedListener {
+        clickToDaySetup()
+    }
+
+    private fun clickToDaySetup() {
+        binding.cpvCalendar.setOnDateSelectedListener(
+            object : CalendarPickerView.OnDateSelectedListener {
                 override fun onDateSelected(date: Date) {
                     val selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(date)
                     Toast.makeText(baseContext, selectedDate, Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onDateUnselected(date: Date?) {
-                    // Ação a ser executada quando uma data é desmarcada
+                    // Action to take when a date is cleared
                 }
-            })
-
-            cpvCalendar.init(Date(), nextYear.time).withSelectedDate(Date())
-        }
+            }
+        )
     }
 }
