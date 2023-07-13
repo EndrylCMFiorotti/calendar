@@ -1,4 +1,4 @@
-# Foobar
+# Calendar Picker View
 
 Project created to implement a calendar that will show which days have been canceled, that is, can not receive events, and which days have scheduled events.
 
